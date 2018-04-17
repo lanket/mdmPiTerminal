@@ -1,7 +1,5 @@
 pyaudio>=0.2.11
 aftership>=0.2
-feedparser>=5.2.0
-gmusicapi>=11.0.0
 googletrans>=2.2.0
 gTTS>=1.2.2
 pafy>=0.5.3.1
