@@ -27,9 +27,9 @@ fi
 clear
 
 
-cd ../
+cd ~/mdmOrangePiZeroTerminal
 sudo apt-get update -y
-
+exit
 sed 's/#.*//' ~/mdmOrangePiZeroTerminal/Requirements/mdm-orangepizero-system-requirements.txt | xargs sudo apt-get install -y
 
 mkdir ~/tmp
@@ -43,6 +43,6 @@ pip install -r ~/mdmOrangePiZeroTerminal/Requirements/mdm-orangepizero-pip-requi
 git clone https://github.com/duxingkei33/orangepi_PC_gpio_pyH3
 cd orangepi_PC_gpio_pyH3
 python setup.py install
-cd /~
+cd ~/
 rm -R ~/tmp
 echo "Установка завершена"
