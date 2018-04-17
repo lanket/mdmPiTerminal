@@ -29,7 +29,7 @@ clear
 
 cd ~/mdmOrangePiZeroTerminal
 sudo apt-get update -y
-exit
+
 sed 's/#.*//' ~/mdmOrangePiZeroTerminal/Requirements/mdm-orangepizero-system-requirements.txt | xargs sudo apt-get install -y
 
 mkdir ~/tmp
