@@ -12,4 +12,5 @@ pafy>=0.5.3.1
 psutil>=5.4.3
 urllib3>=1.22
 requests>=2.18.4
-yandex_speech>=0.4 
+yandex_speech>=0.4
+SpeechRecognition>=3.8.1 
