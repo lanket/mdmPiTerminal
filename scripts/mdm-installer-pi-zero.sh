@@ -31,7 +31,7 @@ cd ~/mdmOrangePiZeroTerminal
 sudo apt-get update -y
 
 sed 's/#.*//' ~/mdmOrangePiZeroTerminal/Requirements/mdm-orangepizero-system-requirements.txt | xargs sudo apt-get install -y
-
+#запустить проверку на создание папки !
 mkdir ~/tmp
 
 python3 -m venv env
