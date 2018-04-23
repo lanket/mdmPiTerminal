@@ -1,3 +1,4 @@
+import pyaudio
 import snowboydecoder
 import sys
 import signal
@@ -7,15 +8,17 @@ import os
 import subprocess
 import speech_recognition as sr
 import urllib.request
-import simpleaudio as sa
+#import simpleaudio as sa
 from tts import say
+import random
 
-subprocess.Popen(["aplay", "~/mdmOrangePiZeroTerminal/src/snd/Startup.wav"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+subprocess.Popen(["aplay", "/home/pi/mdmOrangePiZeroTerminal/src/snd/Startup.wav"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 interrupted = False
 
 #Ссылки на голосовые модели 
-models = ['~/mdmOrangePiZeroTerminal/src/resources/privet.pmdl']
+
+models = ['/home/pi//mdmOrangePiZeroTerminal/src/resources/alice_privet.pmdl', '/home/pi/mdmOrangePiZeroTerminal/src/resources/privet-alice.pmdl']
 
 def signal_handler(signal, frame):
     global interrupted
@@ -30,26 +33,29 @@ def interrupt_callback():
 def detected():
    try:
        snowboydecoder.play_audio_file(snowboydecoder.DETECT_DING)
-       say ("Слушаю !")
+       index = pyaudio.PyAudio().get_device_count() - 1
+       print (index)
        r = sr.Recognizer()
-       with sr.Microphone(2) as source: # Микрофон включается на 2 устройстве 
-           r.adjust_for_ambient_noise(source)  # Слушаем шум 1 секунду, потом распознаем, если раздажает задержка можно закомментировать. 
+       with sr.Microphone(index) as source:
+           r.adjust_for_ambient_noise(source) # Слушаем шум 1 секунду, потом распознаем, если раздажает задержка можно закомментировать. 
+           random_item = random.SystemRandom().choice(["Привет", "Слушаю", "На связи", "Да госпадин"])
+           say (random_item)
            audio = r.listen(source, timeout = 10)
            snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
            print("Processing !")
-#          print(r.recognize_wit(audio, key="ключ WIT"))
-#          command=r.recognize_wit(audio, key="ключ WIT")
-           command=r.recognize_google(audio,language="ru-RU")
+           command=r.recognize_wit(audio, key="2S2VKVFO5X7353BN4X6YBX56L4S2IZT4")
+           #command=r.recognize_google(audio, language="ru-RU")
            print(command)
            snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
-           link='http://192.168.1.10/command.php?qry=' + urllib.parse.quote_plus(command)
-           f=urllib.request.urlopen(link)
+#           link='http://192.168.1.10/command.php?qry=' + urllib.parse.quote_plus(command)
+#           f=urllib.request.urlopen(link)
    except  sr.UnknownValueError:
-           say("Я не понимаю, что ты сказал.")
+           random_item = random.SystemRandom().choice(["Вы что то сказали ?", "Я ничего не услышала", "Что Вы спросили?", "Не поняла"])
+           say (random_item)
            detected
 
    except sr.RequestError as e:
-           print("Could not request results from Microsoft Bing Voice Recognition service; {0}".format(e))
+           print("Произошла ошибка  {0}".format(e))
 
    except sr.WaitTimeoutError:
            print ("Я ничего не услышала")
@@ -58,10 +64,10 @@ def detected():
 #capture SIGINT signal, e.g., Ctrl+C
 signal.signal(signal.SIGINT, signal_handler)
 
-sensitivity = [0.3]*len(models) #уровень распознования, чем больше значение, тем больше ложных срабатываней 
+sensitivity = [0.4]*len(models) #уровень распознования, чем больше значение, тем больше ложных срабатываней 
 detector = snowboydecoder.HotwordDetector(models, sensitivity=sensitivity)
-callbacks = [detected]
-print('Listening... Press Ctrl+C to exit')
+callbacks = [detected, detected]
+print('Слушаю... Нажмите Ctrl+C для выхода')
 
 # main loop
 # make sure you have the same numbers of callbacks and models

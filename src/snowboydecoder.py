@@ -14,8 +14,8 @@ logger.setLevel(logging.INFO)
 TOP_DIR = os.path.dirname(os.path.abspath(__file__))
 
 RESOURCE_FILE = os.path.join(TOP_DIR, "resources/common.res")
-DETECT_DING = os.path.join(TOP_DIR, "resources/ding.wav")
-DETECT_DONG = os.path.join(TOP_DIR, "resources/dong.wav")
+DETECT_DING = os.path.join(TOP_DIR, "snd/ding.wav")
+DETECT_DONG = os.path.join(TOP_DIR, "snd/dong.wav")
 
 
 class RingBuffer(object):
